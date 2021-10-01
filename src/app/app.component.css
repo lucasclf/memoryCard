@@ -1,0 +1,24 @@
+.caixaTexto {
+  text-align: center;
+  margin-top: 2%;
+}
+
+.texto {
+  font-weight: 500;
+  font-family: sans-serif;
+  color: #3e236d
+}
+
+.cartas {
+  display: grid;
+  grid-template-columns: repeat(8, 150px);
+  gap: 25px;
+  justify-content: center;
+  margin-top: 3%;
+}
+
+@media (max-width: 600px) {
+  .cartas {
+      grid-template-columns: repeat(2, 150px);
+  }
+}
