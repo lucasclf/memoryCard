@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
 import { Cartas } from './game-card/shared/game-card.model';
+import { PerdeuJogoComponent } from './perdeu-jogo';
 import { ReiniciarJogoComponent } from './reiniciar-jogo';
 
 @Component({
@@ -9,7 +11,20 @@ import { ReiniciarJogoComponent } from './reiniciar-jogo';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
+  @ViewChild('cd', {static: false}) private countdown: CountdownComponent
+
+  timer: number = 0
+  notify = '';
+
+  timerConfig: CountdownConfig 
+
   /**
+   * Variavel responsável por contabilizar as tentavias.
+   */
+  public tentativas: number = 0
+
+    /**
    * Variavel contendo um array com os nomes das imagens das cartas.
    * 
    */
@@ -48,8 +63,65 @@ export class AppComponent implements OnInit {
    */
   private contadorCartasIguais:number = 0;
 
+  /**
+   * Definindo dificuldades
+   */
+   private _showInicio: boolean;
+   private _showJogo: boolean;
+
+   inicializar(): void {
+    this._showInicio = true;
+    this._showJogo = false;
+   }
+
+   get showInicio(): boolean {
+    return this._showInicio;
+  }
+
+  get showJogo():boolean{
+    return this._showJogo
+  }
+
+  private dificuldadeDefinida: boolean = false;
+
+  private qtdCartas: number = 0;
+
+  private flag: number
+
+  iniciarJogo(dificuldade: number): void {
+    switch (dificuldade) {
+      case 1:
+        this.dificuldadeDefinida = true
+        this.timer = 120
+        this.qtdCartas = 6 //20
+        this.flag = this.timer
+        break;
+      case 2:
+        this.dificuldadeDefinida = true
+        this.timer = 150
+        this.qtdCartas = 9
+        this.flag = this.timer
+        break;
+      case 3:
+        this.dificuldadeDefinida = true
+        this.timer = 140
+        this.qtdCartas = 12
+        this.flag = this.timer
+        break;
+    }
+    
+    
+    if (this.dificuldadeDefinida) {
+      this.timerConfig = { leftTime: this.timer, format: 'mm:ss', demand: true, notify: []}
+      this._showInicio = false;
+      this._showJogo = true;
+      this.config();
+
+    }
+  }
+
   ngOnInit(): void {
-    this.config();
+    this.inicializar();
   }
 
   constructor(private alerta: MatDialog) {
@@ -61,17 +133,16 @@ export class AppComponent implements OnInit {
    * nomes do array @imagensCartas
    * @returns void
    */
-  config(): void {
+   config(): void {
     this.cartas = [];
-    this.imagensCartas.forEach((imagem) => {
+    for (let i = 0; i < this.qtdCartas; i++) {
       const cartaInfo: Cartas = {
-        imagemId: imagem,
+        imagemId: this.imagensCartas[i],
         estado: 'normal'
       };
-
       this.cartas.push({ ...cartaInfo });
       this.cartas.push({ ...cartaInfo });
-    });
+    }
 
     this.cartas = this.embaralhar(this.cartas);
   }
@@ -99,7 +170,6 @@ export class AppComponent implements OnInit {
    */
   cartaClicada(index: number): void {
     const cartaInfo = this.cartas[index];
-
     if (cartaInfo.estado === 'normal' && this.cartaVirada.length < 2) {
       cartaInfo.estado = 'virado';
       this.cartaVirada.push(cartaInfo);
@@ -107,10 +177,10 @@ export class AppComponent implements OnInit {
       if (this.cartaVirada.length > 1) {
         this.checarCartasIguais();
       }
-    } else if (cartaInfo.estado === 'virado') {
+    }/*  else if (cartaInfo.estado === 'virado') {
       cartaInfo.estado = 'normal';
       this.cartaVirada.pop();
-    }
+    } */
   }
 
   /**
@@ -134,7 +204,7 @@ export class AppComponent implements OnInit {
         this.contadorCartasIguais++;
         console.log(this.contadorCartasIguais)
 
-        if(this.contadorCartasIguais === this.imagensCartas.length) {
+        if(this.contadorCartasIguais === this.qtdCartas) {
           const alertaRef = this.alerta.open(ReiniciarJogoComponent, {
             disableClose: true
           });
@@ -144,7 +214,7 @@ export class AppComponent implements OnInit {
           });
 
         }
-      }
+      } this.tentativas++
     }, 1000);
   }
 
@@ -155,7 +225,28 @@ export class AppComponent implements OnInit {
    */
   restart(): void {
     this.contadorCartasIguais = 0;
-    this.config();
+    this.tentativas = 0;
+    this.inicializar();
   }
+
+  begin(): void {
+    this.countdown.begin()
+  }
+
+  gatilhoCronometro(e: CountdownEvent) {
+    this.notify = e.action.toUpperCase();
+    if(this.notify === "DONE") {
+      const perdeuRef = this.alerta.open(PerdeuJogoComponent, {
+        disableClose: true
+      });
+
+      perdeuRef.afterClosed().subscribe(() => {
+        this.config();
+        this.timerConfig = { leftTime: this.flag, format: 'mm:ss', demand: true, notify: []}
+
+      });
+    }
+  }
+
 }
 

@@ -1,20 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@400;500;700&display=swap');
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
 .caixaTexto {
   text-align: center;
   margin-top: 2%;
 }
 
+#cronometro{
+  border: 3px solid #1436AD;
+  border-radius: 5px;
+  padding: 1vh;
+  background-color: #eee486;
+  font-size: 1.5em;
+  font-family: 'Righteous';
+  color: #3e236d;
+  box-shadow: 0px 0px 10px #B556FA;
+}
+
 .texto {
   font-weight: 500;
-  font-family: sans-serif;
-  color: #3e236d
+  font-family: 'Noto Sans Display';
+  color: #3e236d;
 }
 
 .cartas {
   display: grid;
-  grid-template-columns: repeat(8, 150px);
+  grid-template-columns: repeat(6, 150px);
   gap: 25px;
   justify-content: center;
   margin-top: 3%;
+}
+
+.titulo{
+  color: #3e236d;
+  margin-top: 10px;
+  font-size: 50px;
+  text-align: center;
+}
+
+#dificuldades {
+  display: flex;
+  justify-content: center;
+
+}
+
+li {
+  margin-top: 2vh;
+  list-style: none;
+}
+
+.facil:hover {
+  color: rgb(11, 207, 44);
+}
+
+.dificil:hover {
+  color: rgb(238, 20, 20);
+}
+button{
+  width: 200px;
+}
+button.botao {
+	font-size: 30px;
+  font-family: 'Righteous';
+	background-color: #B556FA;
+	padding: 15px;
+  text-align: center;
+  border: 4px solid #680EAD;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:link, button:visited {
+    background-color: white;
+    color: #FAE316 ;
+    text-decoration: none;
+    border: 4px solid #4c0583;
+}
+
+button:hover, button:active {
+    background-color: #aa3ff7;
+    color: #FAE316 ;
+    border: 4px solid #4c0583;
 }
 
 @media (max-width: 600px) {
