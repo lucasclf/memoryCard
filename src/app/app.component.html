@@ -1,0 +1,12 @@
+<mat-toolbar color="primary" class="corpo">
+  Jogo da Memória
+</mat-toolbar>
+<div class="caixaTexto">
+  <h1 class="texto"> Clique numa carta para vira ela. Você pode virar no máximo, duas cartas por vez. Quando achar
+    os pares, eles irão sumir da tela. <br> Boa sorte!
+  </h1>
+  <div class="cartas">
+    <app-game-card *ngFor="let carta of cartas; let idx = index" [carta]="carta" (clicado)="cartaClicada(idx)">
+    </app-game-card>
+  </div>
+</div>
