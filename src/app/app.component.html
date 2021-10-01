@@ -1,12 +1,43 @@
 <mat-toolbar color="primary" class="corpo">
-  Jogo da Memória
+  <a href="" (click)="restart()">Jogo da Memória</a>
 </mat-toolbar>
-<div class="caixaTexto">
-  <h1 class="texto"> Clique numa carta para vira ela. Você pode virar no máximo, duas cartas por vez. Quando achar
+
+<div *ngIf="showInicio">
+
+  <h1 class="titulo">Iniciar Jogo: Escolha a dificuldade</h1>
+  <div id="dificuldades">
+    <ul>
+      <li>
+        <button class="botao facil" (click)='iniciarJogo(1)'>
+          Fácil
+        </button>
+      </li>
+      <li>
+        <button class="botao" (click)='iniciarJogo(2)'>
+          Normal
+        </button>
+      </li>
+      <li>
+        <button class="botao dificil" (click)='iniciarJogo(3)'>
+          Difícil
+        </button>
+      </li>
+
+    </ul>
+  </div>
+</div>
+<div class="caixaTexto" *ngIf="showJogo">
+  <h1 class="texto"> Clique em uma carta para virar ela. Você pode virar no máximo, duas cartas por vez. Quando achar
     os pares, eles irão sumir da tela. <br> Boa sorte!
   </h1>
+  
+  <h2 class="texto">Tentativas: {{ tentativas }} </h2>
+  
+  <div>
+    <countdown id="cronometro" #cd [config]="timerConfig" (event)="gatilhoCronometro($event)"></countdown>
+  </div>
   <div class="cartas">
-    <app-game-card *ngFor="let carta of cartas; let idx = index" [carta]="carta" (clicado)="cartaClicada(idx)">
+    <app-game-card *ngFor="let carta of cartas; let idx = index" [carta]="carta" (clicado)="cartaClicada(idx)" (click)="begin()">
     </app-game-card>
   </div>
 </div>

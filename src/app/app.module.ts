@@ -10,12 +10,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ReiniciarJogoComponent } from './reiniciar-jogo';
+import { CountdownModule } from 'ngx-countdown';
+import { PerdeuJogoComponent } from './perdeu-jogo';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameCardComponent,
-    ReiniciarJogoComponent
+    ReiniciarJogoComponent,
+    PerdeuJogoComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,8 @@ import { ReiniciarJogoComponent } from './reiniciar-jogo';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    CountdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
