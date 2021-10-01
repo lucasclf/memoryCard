@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
    */
   public tentativas: number = 0
 
-    /**
+  /**
    * Variavel contendo um array com os nomes das imagens das cartas.
    * 
    */
@@ -64,16 +64,22 @@ export class AppComponent implements OnInit {
   private contadorCartasIguais:number = 0;
 
   /**
-   * Definindo dificuldades
+   * Variaveis que definem qual tela será exibida.
    */
    private _showInicio: boolean;
    private _showJogo: boolean;
 
+  /**
+   * Define que a tela inicial será a de escolha de dificuldades.
+   */
    inicializar(): void {
     this._showInicio = true;
     this._showJogo = false;
    }
 
+  /**
+   * Metodo que guia 
+   */
    get showInicio(): boolean {
     return this._showInicio;
   }
@@ -205,6 +211,7 @@ export class AppComponent implements OnInit {
         console.log(this.contadorCartasIguais)
 
         if(this.contadorCartasIguais === this.qtdCartas) {
+          this.stop();
           const alertaRef = this.alerta.open(ReiniciarJogoComponent, {
             disableClose: true
           });
@@ -231,6 +238,10 @@ export class AppComponent implements OnInit {
 
   begin(): void {
     this.countdown.begin()
+  }
+
+  stop(): void {
+    this.countdown.stop();
   }
 
   gatilhoCronometro(e: CountdownEvent) {
