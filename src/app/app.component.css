@@ -88,6 +88,16 @@ button:hover, button:active {
     border: 4px solid #4c0583;
 }
 
+#logoPata{
+  width: 6.5vh;
+  margin-right: 1vw;
+  cursor: pointer;
+}
+
+#barraProgresso{
+  margin: 3vw;
+}
+
 @media (max-width: 600px) {
   .cartas {
       grid-template-columns: repeat(2, 150px);

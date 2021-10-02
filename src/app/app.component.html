@@ -1,4 +1,5 @@
 <mat-toolbar color="primary" class="corpo">
+  <img src="/assets/imagem/PataLogo.png" alt="Logo-Pata" id="logoPata" (click)="restart()">
   <a href="" (click)="restart()">Jogo da Memória</a>
 </mat-toolbar>
 
@@ -22,6 +23,11 @@
           Difícil
         </button>
       </li>
+      <li>
+        <button class="botao dificil" (click)='iniciarJogo(4)'>
+          Teste
+        </button>
+      </li>
 
     </ul>
   </div>
@@ -35,6 +41,9 @@
   
   <div>
     <countdown id="cronometro" #cd [config]="timerConfig" (event)="gatilhoCronometro($event)"></countdown>
+  </div>
+  <div id="barraProgresso">
+    <mat-progress-bar mode="determinate" [value]="progresso"></mat-progress-bar>
   </div>
   <div class="cartas">
     <app-game-card *ngFor="let carta of cartas; let idx = index" [carta]="carta" (clicado)="cartaClicada(idx)" (click)="begin()">

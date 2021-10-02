@@ -12,12 +12,12 @@ import { ReiniciarJogoComponent } from './reiniciar-jogo';
 })
 export class AppComponent implements OnInit {
 
-  @ViewChild('cd', {static: false}) private countdown: CountdownComponent
+  @ViewChild('cd', { static: false }) private countdown: CountdownComponent
 
   timer: number = 0
   notify = '';
 
-  timerConfig: CountdownConfig 
+  timerConfig: CountdownConfig
 
   /**
    * Variavel responsável por contabilizar as tentavias.
@@ -25,9 +25,9 @@ export class AppComponent implements OnInit {
   public tentativas: number = 0
 
   /**
-   * Variavel contendo um array com os nomes das imagens das cartas.
-   * 
-   */
+ * Variavel contendo um array com os nomes das imagens das cartas.
+ * 
+ */
   private readonly imagensCartas = [
     '01',
     '02',
@@ -61,30 +61,24 @@ export class AppComponent implements OnInit {
    * Variavel responsavel por contar o numero de cartas  que batem.
    * 
    */
-  private contadorCartasIguais:number = 0;
+  private contadorCartasIguais: number = 0;
 
   /**
-   * Variaveis que definem qual tela será exibida.
+   * Definindo dificuldades
    */
-   private _showInicio: boolean;
-   private _showJogo: boolean;
+  private _showInicio: boolean;
+  private _showJogo: boolean;
 
-  /**
-   * Define que a tela inicial será a de escolha de dificuldades.
-   */
-   inicializar(): void {
+  inicializar(): void {
     this._showInicio = true;
     this._showJogo = false;
-   }
+  }
 
-  /**
-   * Metodo que guia 
-   */
-   get showInicio(): boolean {
+  get showInicio(): boolean {
     return this._showInicio;
   }
 
-  get showJogo():boolean{
+  get showJogo(): boolean {
     return this._showJogo
   }
 
@@ -94,6 +88,10 @@ export class AppComponent implements OnInit {
 
   private flag: number
 
+  /**
+   * Função para iniciar o jogo, definir a dificuldade e os parametros do jogo em geral.
+   * @param dificuldade Usado para definir dificuldade. Sendo o número 1 a dificuldade fácil e o número 3 a dificuldade dificil.
+   */
   iniciarJogo(dificuldade: number): void {
     switch (dificuldade) {
       case 1:
@@ -114,11 +112,16 @@ export class AppComponent implements OnInit {
         this.qtdCartas = 12
         this.flag = this.timer
         break;
+      case 4:
+        this.dificuldadeDefinida = true
+        this.timer = 140
+        this.qtdCartas = 1
+        this.flag = this.timer
+        break;
     }
-    
-    
+
     if (this.dificuldadeDefinida) {
-      this.timerConfig = { leftTime: this.timer, format: 'mm:ss', demand: true, notify: []}
+      this.timerConfig = { leftTime: this.timer, format: 'mm:ss', demand: true, notify: [] }
       this._showInicio = false;
       this._showJogo = true;
       this.config();
@@ -135,11 +138,18 @@ export class AppComponent implements OnInit {
   }
 
   /**
+   * Definindo a barra de progresso e seus parametros
+   */
+
+  public progresso: number = 0;
+  private equacaoProgresso: number;
+
+  /**
    * Metodo responsavel por gerar os pares de cartas puxando seus
    * nomes do array @imagensCartas
    * @returns void
    */
-   config(): void {
+  config(): void {
     this.cartas = [];
     for (let i = 0; i < this.qtdCartas; i++) {
       const cartaInfo: Cartas = {
@@ -149,7 +159,9 @@ export class AppComponent implements OnInit {
       this.cartas.push({ ...cartaInfo });
       this.cartas.push({ ...cartaInfo });
     }
-
+    this.progresso = 0;
+    this.equacaoProgresso = 100 / this.qtdCartas;
+    console.log(this.equacaoProgresso)
     this.cartas = this.embaralhar(this.cartas);
   }
 
@@ -163,8 +175,8 @@ export class AppComponent implements OnInit {
    */
   embaralhar(listar: any[]): Cartas[] {
     return listar.map(a => [Math.random(), a])
-    .sort((a, b) => a[0] - b[0])
-    .map(a => a[1])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1])
   }
 
   /**
@@ -183,10 +195,7 @@ export class AppComponent implements OnInit {
       if (this.cartaVirada.length > 1) {
         this.checarCartasIguais();
       }
-    }/*  else if (cartaInfo.estado === 'virado') {
-      cartaInfo.estado = 'normal';
-      this.cartaVirada.pop();
-    } */
+    }
   }
 
   /**
@@ -198,7 +207,7 @@ export class AppComponent implements OnInit {
    * @returns void
    */
   checarCartasIguais(): void {
-    setTimeout (() => {
+    setTimeout(() => {
       const carta01 = this.cartaVirada[0];
       const carta02 = this.cartaVirada[1];
       const proxEstado = carta01.imagemId === carta02.imagemId ? 'combinado' : 'normal';
@@ -206,11 +215,11 @@ export class AppComponent implements OnInit {
 
       this.cartaVirada = [];
 
-      if(proxEstado === 'combinado') {
+      if (proxEstado === 'combinado') {
         this.contadorCartasIguais++;
-        console.log(this.contadorCartasIguais)
+        this.progresso = this.contadorCartasIguais * this.equacaoProgresso;
 
-        if(this.contadorCartasIguais === this.qtdCartas) {
+        if (this.contadorCartasIguais === this.qtdCartas) {
           this.stop();
           const alertaRef = this.alerta.open(ReiniciarJogoComponent, {
             disableClose: true
@@ -246,14 +255,14 @@ export class AppComponent implements OnInit {
 
   gatilhoCronometro(e: CountdownEvent) {
     this.notify = e.action.toUpperCase();
-    if(this.notify === "DONE") {
+    if (this.notify === "DONE") {
       const perdeuRef = this.alerta.open(PerdeuJogoComponent, {
         disableClose: true
       });
 
       perdeuRef.afterClosed().subscribe(() => {
         this.config();
-        this.timerConfig = { leftTime: this.flag, format: 'mm:ss', demand: true, notify: []}
+        this.timerConfig = { leftTime: this.flag, format: 'mm:ss', demand: true, notify: [] }
 
       });
     }
