@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-reiniciar-jogo',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class ReiniciarJogoComponent implements OnInit {
 
   constructor() { }
+
 
   ngOnInit(): void {
   }
