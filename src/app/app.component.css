@@ -98,6 +98,26 @@ button:hover, button:active {
   margin: 3vw;
 }
 
+main{
+  min-height: 68vh;
+}
+
+#rodape {
+  position: relative;
+  bottom: 0%;
+  margin-top: 10vh;
+  padding-top: 1.5vh;
+  background-image: linear-gradient(#aa3ff7, #4c0583);
+  text-align: center;
+  font-family: 'Noto Sans Display';
+  font-size: medium;
+  color: #f3f2e8;
+}
+
+#rodape div{
+  padding-bottom: 1vh;
+}
+
 @media (max-width: 600px) {
   .cartas {
       grid-template-columns: repeat(2, 150px);
